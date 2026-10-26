@@ -80,7 +80,24 @@ def epsilon_greedy(q_values, state, actions, epsilon, rng):
     """TODO 3: Choose an action with epsilon-greedy exploration."""
     # q_values is a dictionary. Its keys are (state, action) pairs.
     # Example key: ((1, 1), "RIGHT"). Unseen entries have value 0.0.
-    raise NotImplementedError("Complete TODO 3: epsilon_greedy")
+
+    #starts returned action as a randomly chosen action
+    chosen_action = rng.choice(actions)
+
+    #1 - epsilon chance to return action with largest Q-value
+    if(rng.random() > epsilon):
+        for action in actions:
+            chosen_q = q_values[(state,chosen_action)] if q_values.get((state,chosen_action)) is not None else 0.0
+            new_q = q_values[(state,action)] if q_values.get((state,action)) is not None else 0.0
+
+            #randomly break ties
+            if(chosen_q == new_q):
+                chosen_action = rng.choice([chosen_action,action])
+            elif(new_q > chosen_q):
+                chosen_action = action
+
+    return chosen_action
+
 
 
 def q_learning_update(q_values, state, action, reward, next_state,
@@ -91,4 +108,17 @@ def q_learning_update(q_values, state, action, reward, next_state,
     # Otherwise target = reward + gamma * max Q(next_state, next_action).
     # Consider every action, including unseen entries with value 0.0.
     # Apply Q <- Q + alpha * (target - Q).
-    raise NotImplementedError("Complete TODO 4: q_learning_update")
+    q = q_values[(state,action)] if q_values.get((state,action)) is not None else 0.0
+
+    if(terminal):
+        target = reward
+    else:
+        maxQ = 0.0
+        for a in actions:
+            new_q = q_values[(next_state,a)] if q_values.get((next_state,a)) is not None else 0.0
+            if(new_q > maxQ):
+                maxQ = new_q
+
+        target = reward + gamma * maxQ
+
+    q_values[(state,action)] = q + alpha * (target - q)
