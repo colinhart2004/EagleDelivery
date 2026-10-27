@@ -35,13 +35,11 @@ def bfs(campus, start, goal):
 
 
 def manhattan(state, goal):
-    """TODO 1: Return Manhattan distance between two (row, column) tuples."""
     # Add the absolute row difference and the absolute column difference.
     # raise NotImplementedError("Complete TODO 1: manhattan")
     return abs(state[0] - goal[0]) + abs(state[1] - goal[1])
 
 def astar(campus, start, goal):
-    """TODO 2: Return SearchResult(path, expanded) for A* graph search."""
     # Use heapq as a priority queue and manhattan() as the heuristic.
     # Track best known g-costs and parent states in dictionaries.
     serial = 0 # adding a serial gives heapq insertion order numbers
@@ -77,10 +75,8 @@ def astar(campus, start, goal):
     return SearchResult(None,expanded)
 
 def epsilon_greedy(q_values, state, actions, epsilon, rng):
-    """TODO 3: Choose an action with epsilon-greedy exploration."""
     # q_values is a dictionary. Its keys are (state, action) pairs.
     # Example key: ((1, 1), "RIGHT"). Unseen entries have value 0.0.
-
     #starts returned action as a randomly chosen action
     chosen_action = rng.choice(actions)
 
@@ -102,7 +98,6 @@ def epsilon_greedy(q_values, state, actions, epsilon, rng):
 
 def q_learning_update(q_values, state, action, reward, next_state,
                       actions, alpha, gamma, terminal):
-    """TODO 4: Update exactly one Q-table entry in place; return nothing."""
     # Get Q(state, action), defaulting to 0.0.
     # If terminal is True, the target is reward with no continuation term.
     # Otherwise target = reward + gamma * max Q(next_state, next_action).
